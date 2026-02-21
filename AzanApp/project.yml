@@ -33,6 +33,7 @@ targets:
     dependencies:
       - package: Adhan
         product: Adhan
+        linkType: dynamic
 
 packages:
   Adhan:
