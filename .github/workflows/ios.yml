@@ -1,0 +1,48 @@
+name: iOS Build via XcodeGen
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    name: Build iOS App
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode Project
+        working-directory: ./AzanApp
+        run: xcodegen generate
+
+      - name: Build App (Unsigned for sideloading)
+        working-directory: ./AzanApp
+        run: |
+          xcodebuild clean build \
+            -project AzanApp.xcodeproj \
+            -scheme AzanApp \
+            -destination "generic/platform=iOS" \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            CONFIGURATION_BUILD_DIR=build/
+
+      - name: Package to Payload
+        working-directory: ./AzanApp
+        run: |
+          mkdir Payload
+          cp -r build/AzanApp.app Payload/
+          zip -r AzanApp-Sideload.ipa Payload
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: AzanApp-IPA
+          path: AzanApp/AzanApp-Sideload.ipa

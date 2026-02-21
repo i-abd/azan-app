@@ -1,0 +1,23 @@
+# Xcode
+build/
+*.pbxproj
+!default.pbxproj
+*.xcworkspace
+!default.xcworkspace
+xcuserdata/
+profile
+*.moved-aside
+DerivedData/
+.idea/
+*.xcuserstate
+
+# SwiftPackageManager
+.build/
+Packages/
+Package.resolved
+
+# Cache
+.swiftpm/
+
+# macOS
+.DS_Store

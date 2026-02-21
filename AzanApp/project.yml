@@ -1,0 +1,38 @@
+name: AzanApp
+options:
+  bundleIdPrefix: com.imti
+targets:
+  AzanApp:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: Sources
+    info:
+      path: Info.plist
+      properties:
+        UILaunchScreen: {}
+        NSLocationWhenInUseUsageDescription: "We need your location to accurately calculate Azan times and find the Qibla."
+        NSLocationAlwaysAndWhenInUseUsageDescription: "We need your location to accurately calculate Azan times and find the Qibla."
+    dependencies:
+      - package: Adhan
+      - target: AzanWidgetExtension
+
+  AzanWidgetExtension:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: Widget
+    info:
+      path: Widget/Info.plist
+      properties:
+        NSExtension:
+          NSExtensionPointIdentifier: "com.apple.widgetkit-extension"
+    dependencies:
+      - package: Adhan
+
+packages:
+  Adhan:
+    url: https://github.com/batoulapps/adhan-swift
+    exactVersion: 1.4.0
