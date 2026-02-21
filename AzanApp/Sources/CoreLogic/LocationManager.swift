@@ -42,6 +42,15 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        let clError = error as? CLError
+        // CLError.locationUnknown (code 1) is temporary — the manager is still searching.
+        // Don't show it as a red error; just retry silently.
+        if clError?.code == .locationUnknown {
+            print("Location still searching, retrying...")
+            manager.requestLocation()
+            return
+        }
+        // For real errors (e.g. denied), surface the message
         DispatchQueue.main.async {
             self.error = error.localizedDescription
             print("Location Manager Failed: \(error.localizedDescription)")

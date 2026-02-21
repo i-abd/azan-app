@@ -3,6 +3,7 @@ import SwiftUI
 struct QiblaView: View {
     @StateObject private var qiblaManager = QiblaManager()
     @EnvironmentObject var locationManager: LocationManager
+    @State private var wasOnTarget = false  // Tracks previous state to avoid repeating haptics
     
     var body: some View {
         NavigationView {
@@ -76,6 +77,15 @@ struct QiblaView: View {
                 if let loc = locationManager.location {
                     qiblaManager.updateLocation(coordinate: loc)
                 }
+            }
+            .onChange(of: qiblaManager.angleToQibla) { angle in
+                let onTarget = angle < 5 || angle > 355
+                if onTarget && !wasOnTarget {
+                    // Fired once when entering the Qibla zone
+                    let generator = UINotificationFeedbackGenerator()
+                    generator.notificationOccurred(.success)
+                }
+                wasOnTarget = onTarget
             }
         }
     }
