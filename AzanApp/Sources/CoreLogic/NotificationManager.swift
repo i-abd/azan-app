@@ -57,7 +57,7 @@ class NotificationManager: ObservableObject {
         case .defaultBeep:
             content.sound = .default
         case .makkahAzan:
-            content.sound = UNNotificationSound(named: UNNotificationSoundName("makkah.caf"))
+            content.sound = UNNotificationSound(named: UNNotificationSoundName("makkah.mp3"))
         case .custom(let filename):
             content.sound = UNNotificationSound(named: UNNotificationSoundName(filename))
         case .silent:
