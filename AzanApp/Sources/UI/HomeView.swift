@@ -1,5 +1,5 @@
 import SwiftUI
-import Adhan
+
 
 struct HomeView: View {
     @EnvironmentObject var prayerTimesManager: PrayerTimesManager

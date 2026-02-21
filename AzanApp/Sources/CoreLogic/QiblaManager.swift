@@ -1,7 +1,7 @@
 import Foundation
 import CoreLocation
 import Combine
-import Adhan
+
 
 class QiblaManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private let locationManager = CLLocationManager()

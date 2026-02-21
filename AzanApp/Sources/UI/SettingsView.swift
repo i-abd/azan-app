@@ -1,5 +1,5 @@
 import SwiftUI
-import Adhan
+
 
 struct SettingsView: View {
     @EnvironmentObject var settingsManager: SettingsManager

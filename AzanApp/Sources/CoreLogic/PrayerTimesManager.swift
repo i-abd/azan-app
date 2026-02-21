@@ -1,6 +1,6 @@
 import Foundation
 import CoreLocation
-import Adhan
+
 
 class PrayerTimesManager: ObservableObject {
     @Published var currentPrayerTimes: PrayerTimes?

@@ -1,6 +1,6 @@
 import Foundation
 import UserNotifications
-import Adhan
+
 
 class NotificationManager: ObservableObject {
     @Published var isAuthorized = false
