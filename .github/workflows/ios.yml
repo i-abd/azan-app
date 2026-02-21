@@ -22,10 +22,6 @@ jobs:
         working-directory: ./AzanApp
         run: xcodegen generate
 
-      - name: Resolve SPM Dependencies
-        working-directory: ./AzanApp
-        run: xcodebuild -resolvePackageDependencies -project AzanApp.xcodeproj -scheme AzanApp
-
       - name: Build App (Unsigned for sideloading)
         working-directory: ./AzanApp
         run: |
