@@ -18,7 +18,7 @@ class SettingsManager: ObservableObject {
     // We can also store the custom calculation method here
     @AppStorage("calculationMethodIndex") var calculationMethodIndex: Int = -1
 
-    func soundPreference(for prayer: Adhan.Prayer) -> SoundSetting {
+    func soundPreference(for prayer: Prayer) -> SoundSetting {
         let decoder = JSONDecoder()
         switch prayer {
         case .fajr: return (try? decoder.decode(SoundSetting.self, from: fajrSoundData)) ?? .makkahAzan
@@ -30,7 +30,7 @@ class SettingsManager: ObservableObject {
         }
     }
 
-    func setSoundPreference(for prayer: Adhan.Prayer, to setting: SoundSetting) {
+    func setSoundPreference(for prayer: Prayer, to setting: SoundSetting) {
         let encoder = JSONEncoder()
         guard let data = try? encoder.encode(setting) else { return }
         
