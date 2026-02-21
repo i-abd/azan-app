@@ -9,7 +9,6 @@ targets:
     sources:
       - path: Sources
       - path: Resources
-        type: folder
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.imti.AzanApp
