@@ -8,6 +8,9 @@ targets:
     deploymentTarget: "16.0"
     sources:
       - path: Sources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.imti.AzanApp
     info:
       path: Info.plist
       properties:
@@ -23,6 +26,9 @@ targets:
     deploymentTarget: "16.0"
     sources:
       - path: Widget
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.imti.AzanApp.widget
     info:
       path: Widget/Info.plist
       properties:
