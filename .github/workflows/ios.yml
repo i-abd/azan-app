@@ -32,17 +32,22 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            CONFIGURATION_BUILD_DIR=build/
+            BUILD_DIR="$(pwd)/build"
 
-      - name: Package to Payload
+      - name: Find and package .app into IPA
         working-directory: ./AzanApp
         run: |
-          mkdir Payload
-          cp -r build/AzanApp.app Payload/
+          # Find the .app bundle wherever xcodebuild put it
+          APP_PATH=$(find build -name "AzanApp.app" -type d | head -n 1)
+          echo "Found .app at: $APP_PATH"
+          mkdir -p Payload
+          cp -r "$APP_PATH" Payload/AzanApp.app
           zip -r AzanApp-Sideload.ipa Payload
+          echo "IPA created successfully"
+          ls -lh AzanApp-Sideload.ipa
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: AzanApp-IPA
-          path: AzanApp/Payload/AzanApp-Sideload.ipa
+          path: AzanApp/AzanApp-Sideload.ipa
