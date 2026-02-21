@@ -1,7 +1,6 @@
 import Foundation
 import CoreLocation
 
-
 class PrayerTimesManager: ObservableObject {
     @Published var currentPrayerTimes: PrayerTimes?
     @Published var nextPrayer: Prayer?
@@ -45,17 +44,16 @@ class PrayerTimesManager: ObservableObject {
         guard let code = countryCode?.uppercased() else { return .muslimWorldLeague }
         
         switch code {
-        case "US", "CA": return .isna
+        case "US", "CA": return .northAmerica
         case "EG": return .egyptian
         case "PK", "IN", "BD": return .karachi
         case "SA": return .ummAlQura
-        case "AE", "QA", "BH", "KW", "OM", "YE": return .dubai
+        case "AE", "BH", "OM", "YE": return .dubai
         case "QA": return .qatar
         case "KW": return .kuwait
-        case "SG": return .singapore
-        case "MY": return .singapore // Often used in Malaysia too
+        case "SG", "MY": return .singapore
         case "TR": return .turkey
-        case "GB", "UK": return .moonsightingCommittee
+        case "GB": return .moonsightingCommittee
         default: return .muslimWorldLeague
         }
     }
@@ -70,21 +68,28 @@ class PrayerTimesManager: ObservableObject {
         guard let times = currentPrayerTimes else { return }
         
         let now = Date()
-        self.nextPrayer = times.nextPrayer()
         
-        if let next = nextPrayer, next != .none {
-            if let time = times.time(for: next) {
-                self.countdown = time.timeIntervalSince(now)
-            }
+        // Find the next prayer time manually
+        let allPrayers: [(Prayer, Date)] = [
+            (.fajr, times.fajr),
+            (.sunrise, times.sunrise),
+            (.dhuhr, times.dhuhr),
+            (.asr, times.asr),
+            (.maghrib, times.maghrib),
+            (.isha, times.isha)
+        ]
+        
+        if let next = allPrayers.first(where: { $0.1 > now }) {
+            self.nextPrayer = next.0
+            self.countdown = next.1.timeIntervalSince(now)
         } else {
-            // Next prayer is tomorrow's Fajr
+            self.nextPrayer = nil
             self.countdown = nil
         }
     }
 
     func getCurrentHijriDate() -> String {
         let formatter = DateFormatter()
-        // Use the Islamic Calendar (Umm al-Qura is common)
         formatter.calendar = Calendar(identifier: .islamicUmmAlQura)
         formatter.dateStyle = .long
         return formatter.string(from: Date())

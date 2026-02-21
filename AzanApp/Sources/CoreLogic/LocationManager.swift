@@ -6,6 +6,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private let manager = CLLocationManager()
     
     @Published var location: CLLocationCoordinate2D?
+    @Published var locationString: String = ""  // Used for onChange observation
     @Published var authorizationStatus: CLAuthorizationStatus?
     @Published var countryCode: String?
     @Published var error: String?
@@ -26,6 +27,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         guard let loc = locations.last else { return }
         DispatchQueue.main.async {
             self.location = loc.coordinate
+            self.locationString = "\(loc.coordinate.latitude),\(loc.coordinate.longitude)"
             self.reverseGeocode(location: loc)
         }
     }

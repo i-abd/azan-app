@@ -23,7 +23,7 @@ struct HomeView: View {
                 .padding(.top)
                 
                 // Countdown Widget
-                if let nextPrayer = prayerTimesManager.nextPrayer, nextPrayer != .none, let countdown = prayerTimesManager.countdown {
+                if let nextPrayer = prayerTimesManager.nextPrayer, let countdown = prayerTimesManager.countdown {
                     VStack {
                         Text("Next: \(prayerName(nextPrayer))")
                             .font(.title2)
@@ -59,16 +59,15 @@ struct HomeView: View {
             .onAppear {
                 locationManager.requestLocation()
             }
-            .onChange(of: locationManager.location) { loc in
-                if let loc = loc {
+            .onChange(of: locationManager.locationString) { _ in
+                if let loc = locationManager.location {
                     prayerTimesManager.calculateTimes(coordinate: loc, countryCode: locationManager.countryCode)
                 }
             }
         }
     }
 
-    private func formatTime(_ date: Date?) -> String {
-        guard let date = date else { return "--:--" }
+    private func formatTime(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.timeStyle = .short
         return formatter.string(from: date)
@@ -90,7 +89,6 @@ struct HomeView: View {
         case .asr: return "Asr"
         case .maghrib: return "Maghrib"
         case .isha: return "Isha"
-        case .none: return "Unknown"
         }
     }
 }

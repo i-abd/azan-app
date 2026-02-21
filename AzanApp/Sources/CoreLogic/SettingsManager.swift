@@ -22,11 +22,11 @@ class SettingsManager: ObservableObject {
         let decoder = JSONDecoder()
         switch prayer {
         case .fajr: return (try? decoder.decode(SoundSetting.self, from: fajrSoundData)) ?? .makkahAzan
+        case .sunrise: return .silent  // No azan for sunrise
         case .dhuhr: return (try? decoder.decode(SoundSetting.self, from: dhuhrSoundData)) ?? .defaultBeep
         case .asr: return (try? decoder.decode(SoundSetting.self, from: asrSoundData)) ?? .makkahAzan
         case .maghrib: return (try? decoder.decode(SoundSetting.self, from: maghribSoundData)) ?? .makkahAzan
         case .isha: return (try? decoder.decode(SoundSetting.self, from: ishaSoundData)) ?? .makkahAzan
-        default: return .defaultBeep
         }
     }
 
@@ -36,11 +36,11 @@ class SettingsManager: ObservableObject {
         
         switch prayer {
         case .fajr: fajrSoundData = data
+        case .sunrise: break  // No sound setting for sunrise
         case .dhuhr: dhuhrSoundData = data
         case .asr: asrSoundData = data
         case .maghrib: maghribSoundData = data
         case .isha: ishaSoundData = data
-        default: break
         }
         
         // Notify observers explicitly since we're modifying UserDefaults inside a class

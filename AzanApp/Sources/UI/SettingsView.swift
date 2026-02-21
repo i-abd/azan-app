@@ -1,6 +1,21 @@
 import SwiftUI
 
 
+// A simple index-based mapping for CalculationMethod since it's not RawRepresentable
+let calculationMethods: [(String, CalculationMethod)] = [
+    ("Muslim World League", .muslimWorldLeague),
+    ("Egyptian", .egyptian),
+    ("Karachi", .karachi),
+    ("Umm Al-Qura", .ummAlQura),
+    ("Dubai", .dubai),
+    ("Qatar", .qatar),
+    ("Kuwait", .kuwait),
+    ("Moonsighting Committee", .moonsightingCommittee),
+    ("North America (ISNA)", .northAmerica),
+    ("Singapore", .singapore),
+    ("Turkey", .turkey),
+]
+
 struct SettingsView: View {
     @EnvironmentObject var settingsManager: SettingsManager
     @EnvironmentObject var prayerTimesManager: PrayerTimesManager
@@ -12,15 +27,9 @@ struct SettingsView: View {
                 Section(header: Text("Prayer Calculation Method")) {
                     Picker("Calculation Method", selection: $settingsManager.calculationMethodIndex) {
                         Text("Auto-Detect (Based on Location)").tag(-1)
-                        Text("Muslim World League").tag(CalculationMethod.muslimWorldLeague.rawValue)
-                        Text("Egyptian").tag(CalculationMethod.egyptian.rawValue)
-                        Text("Karachi").tag(CalculationMethod.karachi.rawValue)
-                        Text("Umm Al-Qura").tag(CalculationMethod.ummAlQura.rawValue)
-                        Text("Dubai").tag(CalculationMethod.dubai.rawValue)
-                        Text("Qatar").tag(CalculationMethod.qatar.rawValue)
-                        Text("Kuwait").tag(CalculationMethod.kuwait.rawValue)
-                        Text("Moonsighting Committee").tag(CalculationMethod.moonsightingCommittee.rawValue)
-                        Text("ISNA (North America)").tag(CalculationMethod.isna.rawValue)
+                        ForEach(Array(calculationMethods.enumerated()), id: \.offset) { idx, method in
+                            Text(method.0).tag(idx)
+                        }
                     }
                     .onChange(of: settingsManager.calculationMethodIndex) { _ in
                         recalculateTimes()
@@ -67,8 +76,6 @@ struct SettingsView: View {
                 Text("Default Beep").tag(SoundSetting.defaultBeep)
                 Text("Makkah Azan").tag(SoundSetting.makkahAzan)
                 Text("Silent").tag(SoundSetting.silent)
-                // In a full implementation, we would invoke a UIDocumentPickerViewController to select a custom file here
-                // For now, we provide the UI structure to support it natively
             }
             .pickerStyle(MenuPickerStyle())
         }
@@ -78,8 +85,9 @@ struct SettingsView: View {
         guard let loc = locationManager.location else { return }
         
         var method: CalculationMethod? = nil
-        if settingsManager.calculationMethodIndex != -1 {
-            method = CalculationMethod(rawValue: settingsManager.calculationMethodIndex)
+        let idx = settingsManager.calculationMethodIndex
+        if idx >= 0 && idx < calculationMethods.count {
+            method = calculationMethods[idx].1
         }
         
         prayerTimesManager.calculateTimes(coordinate: loc, countryCode: locationManager.countryCode, customMethod: method)
