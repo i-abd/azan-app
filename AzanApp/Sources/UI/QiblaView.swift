@@ -72,8 +72,8 @@ struct QiblaView: View {
             .onDisappear {
                 qiblaManager.stopUpdatingHeading()
             }
-            .onChange(of: locationManager.location) { loc in
-                if let loc = loc {
+            .onChange(of: locationManager.locationString) { _ in
+                if let loc = locationManager.location {
                     qiblaManager.updateLocation(coordinate: loc)
                 }
             }
