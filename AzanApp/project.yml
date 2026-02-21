@@ -16,6 +16,7 @@ targets:
         NSLocationAlwaysAndWhenInUseUsageDescription: "We need your location to accurately calculate Azan times and find the Qibla."
     dependencies:
       - package: Adhan
+        product: Adhan
       - target: AzanWidgetExtension
 
   AzanWidgetExtension:
@@ -30,7 +31,8 @@ targets:
         NSExtension:
           NSExtensionPointIdentifier: "com.apple.widgetkit-extension"
     dependencies:
-      - target: Adhan
+      - package: Adhan
+        product: Adhan
 
 packages:
   Adhan:
