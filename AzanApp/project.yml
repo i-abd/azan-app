@@ -30,10 +30,6 @@ targets:
       properties:
         NSExtension:
           NSExtensionPointIdentifier: "com.apple.widgetkit-extension"
-    dependencies:
-      - package: Adhan
-        product: Adhan
-        linkType: dynamic
 
 packages:
   Adhan:

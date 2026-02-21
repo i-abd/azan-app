@@ -1,7 +1,6 @@
 import WidgetKit
 import SwiftUI
 import CoreLocation
-import Adhan
 
 // We'll use a standard struct for widget entries
 struct Provider: TimelineProvider {
